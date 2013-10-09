@@ -2,6 +2,7 @@
 #include "ui_createfiledialog.h"
 #include "constants.h"
 #include "TripleSonicSlash.h"
+#include "fileworker.h"
 
 CreateFileDialog::CreateFileDialog(FileCreateParams *params, QWidget *parent) :
     QDialog(parent),
@@ -42,26 +43,7 @@ void CreateFileDialog::on_buttonBox_accepted()
         _params->CreateOptions = OPEN_ALWAYS;
     }
 
-    WCHAR* chars;
-    std::wstring wst = _params->FileName.toStdWString();
-    LPCWSTR filePath = wst.c_str();
-    //Открытие файла
-    HANDLE handle = CreateFileW(filePath, _params->DesiredAccess, 0, NULL,
-                               _params->CreateOptions, FILE_ATTRIBUTE_NORMAL, NULL);
-    //Проверка на ошибку
-    if(handle == INVALID_HANDLE_VALUE)
-    {
-        _params->IsFileOpenError = true;
-        DWORD err = GetLastError();
-        QString errorMessage = TripleSonicSlash::GetCodeMessage(err);
-        _params->FileOpenError = errorMessage;
-        emit CreateComplete();
-        return;
-    }
-    _params->FileSize = GetFileSize(handle, NULL);
-    _params->IsFileOpenError = false;
-    _params->FileHandle = handle;
-    _params->Accepted = true;
+    FileWorker::OpenCreateFile(_params);
     emit CreateComplete();
 }
 
