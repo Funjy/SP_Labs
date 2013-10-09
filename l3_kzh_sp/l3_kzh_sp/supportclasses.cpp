@@ -3,9 +3,3 @@
 SupportClasses::SupportClasses()
 {
 }
-
-
-void FileCreateParams::UpdateFileData(HANDLE fHandle)
-{
-
-}

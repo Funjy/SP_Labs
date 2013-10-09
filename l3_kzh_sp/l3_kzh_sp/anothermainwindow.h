@@ -5,6 +5,7 @@
 #include "createfiledialog.h"
 #include "supportclasses.h"
 #include "CreateDirDialog.h"
+#include "fileworker.h"
 
 namespace Ui {
 class AnotherMainWindow;

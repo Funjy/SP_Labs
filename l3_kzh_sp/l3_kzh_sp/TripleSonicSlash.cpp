@@ -20,10 +20,14 @@ QString TripleSonicSlash::GetCodeMessage(DWORD errCode)
     return QString::fromStdWString(lpMsgBuf);
 }
 
-void TripleSonicSlash::CheckFalseGetError(bool toCheck)
+bool TripleSonicSlash::CheckFalseGetError(bool toCheck)
 {
     if(!toCheck)
+    {
         ShowError();
+        return false;
+    }
+    return true;
 }
 
 void TripleSonicSlash::ShowError()
@@ -33,3 +37,26 @@ void TripleSonicSlash::ShowError()
     QMessageBox mbox(QMessageBox::Warning, "Ошибка", errorMessage);
     mbox.exec();
 }
+
+//--------------MyException---------------
+
+
+MyException::MyException()
+{
+    _message = "";
+}
+
+MyException::MyException(QString message)
+{
+    _message = message;
+}
+QString MyException::what() throw()
+{
+    return _message;
+}
+
+void MyException::SetMessage(QString message) throw()
+{
+    _message = message;
+}
+

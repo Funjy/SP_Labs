@@ -8,8 +8,20 @@ class TripleSonicSlash
 public:
     TripleSonicSlash();
     static QString GetCodeMessage(DWORD errCode);
-    static void CheckFalseGetError(bool toCheck);
+    static bool CheckFalseGetError(bool toCheck);
     static void ShowError();
+};
+
+class MyException : public QException
+{
+public:
+    MyException();
+    MyException(QString message);
+    ~MyException() throw() {}
+    QString what() throw();
+    void SetMessage(QString message) throw();
+private:
+    QString _message;
 };
 
 /*class Buffer<T>

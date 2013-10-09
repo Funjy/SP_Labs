@@ -16,7 +16,6 @@ public:
 class FileCreateParams
 {
 public:
-    void UpdateFileData(HANDLE fHandle);
     HANDLE FileHandle;
     QString FileName;
     DWORD DesiredAccess;

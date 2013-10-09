@@ -1,0 +1,14 @@
+INPUT(
+./debug\main.o
+./debug\fileworker.o
+./debug\createfiledialog.o
+./debug\constants.o
+./debug\supportclasses.o
+./debug\TripleSonicSlash.o
+./debug\anothermainwindow.o
+./debug\CreateDirDialog.o
+./debug\DirWorker.o
+./debug\moc_createfiledialog.o
+./debug\moc_anothermainwindow.o
+./debug\moc_CreateDirDialog.o
+);

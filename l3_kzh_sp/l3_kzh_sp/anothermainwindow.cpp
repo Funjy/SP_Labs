@@ -137,92 +137,14 @@ void AnotherMainWindow::on_UpdateFileButton_clicked()
             break;
         }
     }
-    std::string startSt = "<html><body>";
-    std::string endSt = "</body></html>";
-    QString nFileName = file->FileName + "_tmp";
-    //WCHAR* chars;
-    std::wstring wst = nFileName.toStdWString();
-    LPCWSTR filePath = wst.c_str();
-    HANDLE nFileHandle = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-    if(nFileHandle == INVALID_HANDLE_VALUE)
+    try
     {
-        TripleSonicSlash::ShowError();
-        return;
+        FileWorker::UpdateFile(file);
+        QMessageBox::information(0, "Информаиця", "Операция изменения файла завершена.");
     }
-    DWORD bytesReadOnPeriod = 0;
-    DWORD bytesWriteOnPeriod = 0;
-    DWORD bytesRead = 0;
-    DWORD position = 0;
-    char buf;
-    int sizec = startSt.length();
-    if(!WriteFile(nFileHandle, startSt.c_str(), sizec, &bytesWriteOnPeriod, NULL))
+    catch(MyException& ex)
     {
-        TripleSonicSlash::ShowError();
-        return;
+        QMessageBox::warning(0, "Внимание", ex.what());
     }
-    if(bytesWriteOnPeriod != sizec)
-    {
-        QMessageBox::warning(0, "Информация", "Не удалось записать информацию в файл.");
-        return;
-    }
-    while(1)
-    {
-        if(!ReadFile(file->FileHandle, &buf, sizeof(char), &bytesReadOnPeriod, NULL))
-        {
-            TripleSonicSlash::ShowError();
-            return;
-        }
-        if(bytesReadOnPeriod == 0)
-        {
-            break;
-        }
-
-        //Выполнение задания
-
-        if(buf == ' ')
-        {
-            continue;
-        }
-
-        if(!WriteFile(nFileHandle, &buf, sizeof(char), &bytesWriteOnPeriod, NULL))
-        {
-            TripleSonicSlash::ShowError();
-            return;
-        }
-        if(bytesWriteOnPeriod == 0)
-        {
-            QMessageBox::warning(0, "Информация", "Не удалось записать информацию в файл.");
-            break;
-        }
-
-    }
-
-    sizec = endSt.length();
-    if(!WriteFile(nFileHandle, endSt.c_str(), sizec, &bytesWriteOnPeriod, NULL))
-    {
-        TripleSonicSlash::ShowError();
-        return;
-    }
-
-    if(!FlushFileBuffers(nFileHandle))
-    {
-        TripleSonicSlash::ShowError();
-        return;
-    }
-
-    if(!CloseHandle(nFileHandle))
-    {
-        TripleSonicSlash::ShowError();
-        return;
-    }
-
-    if(!CloseHandle(file->FileHandle))
-    {
-        TripleSonicSlash::ShowError();
-        return;
-    }
-
-    QMessageBox::information(0, "Информаиця", "Операция изменения файла завершена.");
-
 }
