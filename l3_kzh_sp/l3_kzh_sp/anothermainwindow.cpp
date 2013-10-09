@@ -46,6 +46,7 @@ void AnotherMainWindow::on_CreateFileDialog_accepted()
         mbox.exec();
         return;
     }
+    ui->DurationBox->setText(QString::number(_createFileParams->LastOperationDuration));
     _openedFiles.append(_createFileParams);
     QMessageBox::information(0, "Информация", "Операция создания/открытия файла успешно завершена.");
     ui->OpenedFilesList->addItem(_createFileParams->FileName);

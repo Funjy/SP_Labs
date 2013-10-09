@@ -15,6 +15,8 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -35,6 +37,9 @@ public:
     QGroupBox *CurDirBox;
     QListWidget *DirContainList;
     QPushButton *UpdateFileButton;
+    QLabel *label;
+    QLineEdit *DurationBox;
+    QLabel *label_2;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -66,6 +71,17 @@ public:
         UpdateFileButton = new QPushButton(centralwidget);
         UpdateFileButton->setObjectName(QStringLiteral("UpdateFileButton"));
         UpdateFileButton->setGeometry(QRect(180, 70, 131, 23));
+        label = new QLabel(centralwidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(30, 240, 141, 31));
+        label->setAlignment(Qt::AlignCenter);
+        DurationBox = new QLineEdit(centralwidget);
+        DurationBox->setObjectName(QStringLiteral("DurationBox"));
+        DurationBox->setGeometry(QRect(30, 280, 41, 20));
+        DurationBox->setReadOnly(true);
+        label_2 = new QLabel(centralwidget);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(80, 280, 46, 13));
         AnotherMainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(AnotherMainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
@@ -88,6 +104,9 @@ public:
         CreateDir->setText(QApplication::translate("AnotherMainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\264\320\270\321\200\320\265\320\272\321\202\320\276\321\200\320\270\321\216", 0));
         CurDirBox->setTitle(QApplication::translate("AnotherMainWindow", "GroupBox", 0));
         UpdateFileButton->setText(QApplication::translate("AnotherMainWindow", "\320\237\320\265\321\200\320\265\320\264\320\265\320\273\320\260\321\202\321\214 \321\204\320\260\320\271\320\273", 0));
+        label->setText(QApplication::translate("AnotherMainWindow", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\277\320\276\321\201\320\273\320\265\320\264\320\275\320\265\320\271 \n"
+"\320\276\320\277\320\265\321\200\320\260\321\206\320\270\320\270", 0));
+        label_2->setText(QApplication::translate("AnotherMainWindow", "\320\274\321\201", 0));
     } // retranslateUi
 
 };

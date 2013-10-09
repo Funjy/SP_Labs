@@ -7,6 +7,7 @@ FileWorker::FileWorker()
 
 void FileWorker::OpenCreateFile(FileCreateParams *params)
 {
+    int t1s = QTime::currentTime().msec();
     std::wstring wst = params->FileName.toStdWString();
     LPCWSTR filePath = wst.c_str();
     //Открытие файла
@@ -27,14 +28,16 @@ void FileWorker::OpenCreateFile(FileCreateParams *params)
     params->IsFileOpenError = false;
     params->FileHandle = handle;
     params->Accepted = true;
+    int t2s = QTime::currentTime().msec();
+    params->LastOperationDuration = (t2s - t1s);
 }
 
 void FileWorker::UpdateFile(FileCreateParams* file)
 {
+    int t1s = QTime::currentTime().msec();
     std::string startSt = "<html><body>";
     std::string endSt = "</body></html>";
     QString nFileName = file->FileName + "_tmp";
-    //WCHAR* chars;
     std::wstring wst = nFileName.toStdWString();
     LPCWSTR filePath = wst.c_str();
     HANDLE nFileHandle = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -46,8 +49,6 @@ void FileWorker::UpdateFile(FileCreateParams* file)
     }
     DWORD bytesReadOnPeriod = 0;
     DWORD bytesWriteOnPeriod = 0;
-    //DWORD bytesRead = 0;
-    //DWORD position = 0;
     char buf;
     DWORD sizec = startSt.length();
     if(!WriteFile(nFileHandle, startSt.c_str(), sizec, &bytesWriteOnPeriod, NULL))
@@ -64,11 +65,6 @@ void FileWorker::UpdateFile(FileCreateParams* file)
     }
     while(1)
     {
-        /*if(!ReadFile(file->FileHandle, &buf, sizeof(char), &bytesReadOnPeriod, NULL))
-        {
-            TripleSonicSlash::ShowError();
-            return;
-        }*/
         if(!TripleSonicSlash::CheckFalseGetError(ReadFile(file->FileHandle,
                                                           &buf, sizeof(char), &bytesReadOnPeriod, NULL)))
             return;
@@ -144,13 +140,7 @@ void FileWorker::UpdateFile(FileCreateParams* file)
         throw ex;
     }
     file->FileHandle = handle;
+    int t2s = QTime::currentTime().msec();
+    file->LastOperationDuration = t2s - t1s;
 
 }
-
-//bool FileWorker::CreateFile(QString fileName)
-//{
-//    LPCTSTR fname;
-//    fname = fileName.toStdString();
-//    return true;
-//    //CreateFile()
-//}

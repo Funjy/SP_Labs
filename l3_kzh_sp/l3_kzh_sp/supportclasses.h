@@ -1,7 +1,9 @@
 #ifndef SUPPORTCLASSES_H
 #define SUPPORTCLASSES_H
-
+//Qt
 #include <QString>
+#include <QTime>
+//Native
 #include "iostream"
 #include "windows.h"
 
@@ -23,6 +25,7 @@ public:
     bool IsFileOpenError;
     QString FileOpenError;
     DWORD FileSize;
+    int LastOperationDuration;
     bool Accepted;
 };
 
