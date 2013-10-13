@@ -7,6 +7,7 @@ class TripleSonicSlash
 {
 public:
     TripleSonicSlash();
+    static QString GetLastErrorMessage();
     static QString GetCodeMessage(DWORD errCode);
     static bool CheckFalseGetError(bool toCheck);
     static void ShowError();

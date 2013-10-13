@@ -6,6 +6,13 @@ TripleSonicSlash::TripleSonicSlash()
 {
 }
 
+QString TripleSonicSlash::GetLastErrorMessage()
+{
+    DWORD err = GetLastError();
+    QString errorMessage = TripleSonicSlash::GetCodeMessage(err);
+    return errorMessage;
+}
+
 QString TripleSonicSlash::GetCodeMessage(DWORD errCode)
 {
     wchar_t* lpMsgBuf;

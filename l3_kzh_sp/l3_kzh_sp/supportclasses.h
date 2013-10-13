@@ -6,6 +6,8 @@
 //Native
 #include "iostream"
 #include "windows.h"
+//Local
+#include "DirWorker.h"
 
 class SupportClasses
 {
@@ -32,8 +34,22 @@ public:
 class DirCreateParams
 {
 public:
+    DirCreateParams() {}
     QString DirName;
+    QString DialogTitle;
+    DirWorker::OperationType OperationType;
 };
+
+class TaskOptions
+{
+public:
+    TaskOptions() { FromDirSet = false; }
+    QString FromDir;
+    QString ToDir;
+    bool FromDirSet;
+};
+
+
 
 
 #endif // SUPPORTCLASSES_H

@@ -29,6 +29,7 @@ void CreateDirDialog::on_buttonBox_accepted()
 void CreateDirDialog::ShowDialog(DirCreateParams *point)
 {
     this->setModal(true);
+    ui->operationLabel->setText(point->DialogTitle);
     ui->lineEdit->setText(_rootDir);
     _point = point;
     this->show();

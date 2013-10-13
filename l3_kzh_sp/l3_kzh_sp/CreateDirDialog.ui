@@ -9,12 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>144</height>
+    <width>406</width>
+    <height>86</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Directory dialog</string>
   </property>
   <property name="modal">
    <bool>false</bool>
@@ -22,9 +22,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>90</y>
-     <width>221</width>
+     <x>230</x>
+     <y>40</y>
+     <width>161</width>
      <height>41</height>
     </rect>
    </property>
@@ -39,10 +39,30 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>30</y>
-     <width>221</width>
+     <y>10</y>
+     <width>381</width>
      <height>21</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="operationLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>211</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
    </property>
   </widget>
  </widget>
@@ -55,12 +75,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>90</y>
+     <x>390</x>
+     <y>40</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
-     <y>143</y>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -71,12 +91,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>90</y>
+     <x>390</x>
+     <y>40</y>
     </hint>
     <hint type="destinationlabel">
      <x>239</x>
-     <y>143</y>
+     <y>85</y>
     </hint>
    </hints>
   </connection>

@@ -117,7 +117,7 @@ public:
 
     void retranslateUi(QDialog *CreateFileDialog)
     {
-        CreateFileDialog->setWindowTitle(QApplication::translate("CreateFileDialog", "Dialog", 0));
+        CreateFileDialog->setWindowTitle(QApplication::translate("CreateFileDialog", "File Dialog", 0));
         FileNameLabel->setText(QApplication::translate("CreateFileDialog", "\320\230\320\274\321\217 \321\204\320\260\320\271\320\273\320\260", 0));
         AccessTypesBox->setTitle(QApplication::translate("CreateFileDialog", "\320\241\320\277\320\276\321\201\320\276\320\261\321\213 \320\264\320\276\321\201\321\202\321\203\320\277\320\260", 0));
         ReadCheckBox->setText(QApplication::translate("CreateFileDialog", "\320\247\321\202\320\265\320\275\320\270\320\265", 0));

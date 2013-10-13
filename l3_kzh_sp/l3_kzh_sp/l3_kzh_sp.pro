@@ -34,6 +34,5 @@ HEADERS  += \
 
 FORMS    += mainwindow.ui \
     createfiledialog.ui \
-    MessageBox.ui \
     anothermainwindow.ui \
     CreateDirDialog.ui
