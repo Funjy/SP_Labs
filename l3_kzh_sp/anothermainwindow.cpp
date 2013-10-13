@@ -10,11 +10,15 @@ AnotherMainWindow::AnotherMainWindow(QWidget *parent) :
     ui(new Ui::AnotherMainWindow)
 {
     ui->setupUi(this);
-    _rootDir = QDir::currentPath();
-    _curDir = _rootDir;
+    //_rootDir = QDir::currentPath();
+
+    DirWorker::RootDir = QDir::currentPath();
+    _curDir = DirWorker::RootDir;
     ui->CurDirBox->setTitle(_curDir);
-    _createDirDialog = new CreateDirDialog(_rootDir);
-    connect(_createDirDialog, SIGNAL(MyAccepted()), this, SLOT(on_CreateDir_accepted()));    
+    _createDirDialog = new CreateDirDialog(DirWorker::RootDir);
+    connect(_createDirDialog, SIGNAL(MyAccepted()), this, SLOT(on_CreateDir_accepted()));
+    _dirWorker = new DirWorker();
+
 }
 
 AnotherMainWindow::~AnotherMainWindow()
@@ -97,12 +101,18 @@ void AnotherMainWindow::on_CreateDir_clicked()
 {
     _createDirP = new DirCreateParams();
     _createDirDialog->ShowDialog( _createDirP);
+
+    //_dirWorker->CreateNewDir(QString(""));
+
 }
 
 void AnotherMainWindow::on_CreateDir_accepted()
 {
+
+    _dirWorker->CreateNewDir(_createDirP->DirName);
+
     //_createDirP->toWCharArray(chars);
-    QString d;
+    /*QString d;
     d = _createDirP->DirName;
     std::wstring wst = d.toStdWString();
     LPCWSTR filePath = wst.c_str();
@@ -117,8 +127,7 @@ void AnotherMainWindow::on_CreateDir_accepted()
     {
         //ui->CurDirBox->setTitle(QDir::currentPath() + QString("\\") + _createDirP);
         ui->CurDirBox->setTitle(QDir::currentPath()+ QString("/") + _createDirP->DirName);
-    }
-
+    }*/
 }
 
 

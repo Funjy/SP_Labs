@@ -6,6 +6,7 @@
 #include "supportclasses.h"
 #include "CreateDirDialog.h"
 #include "fileworker.h"
+#include "DirWorker.h"
 
 namespace Ui {
 class AnotherMainWindow;
@@ -42,6 +43,7 @@ private:
     DirCreateParams* _createDirP;
     QString _rootDir;
     QString _curDir;
+    DirWorker* _dirWorker;
 };
 
 #endif // ANOTHERMAINWINDOW_H
