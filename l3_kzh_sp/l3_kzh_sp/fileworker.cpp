@@ -6,8 +6,15 @@ FileWorker::FileWorker()
 }
 
 void FileWorker::OpenCreateFile(FileCreateParams *params)
-{
+{    
     int t1s = QTime::currentTime().msec();
+    if(params == NULL)
+    {
+        params = new FileCreateParams();
+        params->IsFileOpenError = true;
+        params->FileOpenError = "Передан пустой параметр.";
+        return;
+    }
     std::wstring wst = params->FileName.toStdWString();
     LPCWSTR filePath = wst.c_str();
     //Открытие файла
@@ -30,6 +37,29 @@ void FileWorker::OpenCreateFile(FileCreateParams *params)
     params->Accepted = true;
     int t2s = QTime::currentTime().msec();
     params->LastOperationDuration = (t2s - t1s);
+}
+
+void FileWorker::OpenCreateFile(QString fileName)
+{
+    FileCreateParams* params = new FileCreateParams();
+    params->FileName = fileName;
+    params->DesiredAccess = GENERIC_READ;
+    params->CreateOptions = OPEN_EXISTING;
+    OpenCreateFile(params);
+}
+
+void FileWorker::CloseOpenedFile(FileCreateParams *params)
+{
+    if(params == NULL)
+    {
+        MyException ex("Передан не инициализированный параметр.");
+        throw ex;
+    }
+    if(!CloseHandle(params->FileHandle))
+    {
+        MyException ex(TripleSonicSlash::GetLastErrorMessage());
+        throw ex;
+    }
 }
 
 void FileWorker::UpdateFile(FileCreateParams* file)
@@ -144,3 +174,4 @@ void FileWorker::UpdateFile(FileCreateParams* file)
     file->LastOperationDuration = t2s - t1s;
 
 }
+

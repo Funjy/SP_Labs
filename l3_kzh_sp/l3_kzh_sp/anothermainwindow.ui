@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>598</width>
+    <height>344</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Main Window in da house</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="OpenedFilesList">
@@ -53,7 +53,7 @@
    <widget class="QPushButton" name="CreateDir">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>320</x>
       <y>40</y>
       <width>121</width>
       <height>23</height>
@@ -63,26 +63,34 @@
      <string>Создать директорию</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="CurDirBox">
+   <widget class="QGroupBox" name="CurDirGroup">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>40</y>
-      <width>211</width>
-      <height>201</height>
+      <x>180</x>
+      <y>130</y>
+      <width>401</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="title">
-     <string>GroupBox</string>
+     <string>Текущая директория</string>
     </property>
-    <widget class="QListWidget" name="DirContainList">
+    <widget class="QLineEdit" name="CurDirBox">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>191</width>
-       <height>171</height>
+       <width>381</width>
+       <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+      </font>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -142,13 +150,70 @@
      <string>мс</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="changeDirButton">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>70</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сменить директорию</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteDirButton">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>100</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Удалить директорию</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="DoTaskButton">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>40</y>
+      <width>131</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Press Me&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Dramatic Big 
+Button</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>598</width>
      <height>21</height>
     </rect>
    </property>

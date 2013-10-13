@@ -4,17 +4,21 @@
 #include "supportclasses.h"
 #include "TripleSonicSlash.h"
 #include <QDir>
+#include <QDesktopServices>
 
 AnotherMainWindow::AnotherMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::AnotherMainWindow)
 {
     ui->setupUi(this);
-    _rootDir = QDir::currentPath();
-    _curDir = _rootDir;
-    ui->CurDirBox->setTitle(_curDir);
-    _createDirDialog = new CreateDirDialog(_rootDir);
+
+    DirWorker::RootDir = QDir::currentPath();
+    _curDir = DirWorker::RootDir;
+    ui->CurDirBox->setText(_curDir);
+    _createDirDialog = new CreateDirDialog(DirWorker::RootDir);
     connect(_createDirDialog, SIGNAL(MyAccepted()), this, SLOT(on_CreateDir_accepted()));    
+
+    _taskOptions = new TaskOptions();
 }
 
 AnotherMainWindow::~AnotherMainWindow()
@@ -41,7 +45,6 @@ void AnotherMainWindow::on_CreateFileDialog_accepted()
 
     if(_createFileParams->IsFileOpenError)
     {
-        //QMessageBox::critical(0, "Ошибка", _createFileParams->FileOpenError + ".");
         QMessageBox mbox(QMessageBox::Warning, "Error", _createFileParams->FileOpenError + ".");
         mbox.exec();
         return;
@@ -50,12 +53,6 @@ void AnotherMainWindow::on_CreateFileDialog_accepted()
     _openedFiles.append(_createFileParams);
     QMessageBox::information(0, "Информация", "Операция создания/открытия файла успешно завершена.");
     ui->OpenedFilesList->addItem(_createFileParams->FileName);
-    //DestroyThis(_createFileDialog);
-}
-
-void AnotherMainWindow::on_CreateFileDialog_rejected()
-{
-
 }
 
 void AnotherMainWindow::DestroyThis(void *pointer)
@@ -66,6 +63,20 @@ void AnotherMainWindow::DestroyThis(void *pointer)
     pointer = 0;
 }
 
+void AnotherMainWindow::DoTask()
+{
+    QList<QString>* fList = new QList<QString>();
+    DirWorker::FindFiles(_taskOptions->FromDir, "*.txt", fList);
+
+    int len = fList->length();
+
+    for(int i = 0; i < len; i++)
+    {
+
+    }
+
+}
+
 void AnotherMainWindow::on_CloseButton_clicked()
 {
     QListWidgetItem* curItem = ui->OpenedFilesList->currentItem();
@@ -73,52 +84,66 @@ void AnotherMainWindow::on_CloseButton_clicked()
         QMessageBox::critical(0, "Ошибка", "Нет выбранных файлов");
         return;
     }
-    bool closed = false;
     FileCreateParams* file;
     foreach (file, _openedFiles) {
         if(file->FileName == curItem->text())
         {
-            closed = CloseHandle(file->FileHandle);
+            try
+            {
+                FileWorker::CloseOpenedFile(file);
+                _openedFiles.removeOne(file);
+                ui->OpenedFilesList->takeItem(ui->OpenedFilesList->row(ui->OpenedFilesList->currentItem()));
+                QMessageBox::information(0, "Информация", "Операция закрытия файла успешно завершена.");
+
+            }
+            catch(MyException &ex)
+            {
+                QMessageBox::critical(0, "Ошибка", ex.what());
+                return;
+            }
+            break;
         }
-    }
-    if(closed)
-    {
-        _openedFiles.removeOne(file);
-        ui->OpenedFilesList->takeItem(ui->OpenedFilesList->row(ui->OpenedFilesList->currentItem()));
-        QMessageBox::information(0, "Информация", "Операция закрытия файла успешно завершена.");
-    }
-    else
-    {
-        QMessageBox::critical(0, "Ошибка", "Ошибка");
     }
 }
 
+
+//Создать папку
 void AnotherMainWindow::on_CreateDir_clicked()
 {
     _createDirP = new DirCreateParams();
+    _createDirP->DialogTitle = "Имя директории для создания";
+    _createDirP->OperationType = DirWorker::Create;
     _createDirDialog->ShowDialog( _createDirP);
 }
 
 void AnotherMainWindow::on_CreateDir_accepted()
 {
-    //_createDirP->toWCharArray(chars);
-    QString d;
-    d = _createDirP->DirName;
-    std::wstring wst = d.toStdWString();
-    LPCWSTR filePath = wst.c_str();
-    if(!CreateDirectoryW(filePath, NULL))
+    switch(_createDirP->OperationType)
     {
-        DWORD err = GetLastError();
-        QString errorMessage = TripleSonicSlash::GetCodeMessage(err);
-        QMessageBox mbox(QMessageBox::Warning, "Ошибка", errorMessage);
-        mbox.exec();
+    case DirWorker::Create:
+        _dirWorker->CreateNewDir(_createDirP->DirName);
+        break;
+    case DirWorker::SetCurrent:
+        _dirWorker->SetCurrentDir(_createDirP->DirName);
+        on_CurrentDir_changed();
+        break;
+    case DirWorker::Delete:
+        _dirWorker->DeleteDir(_createDirP->DirName);
+        break;
+    case DirWorker::FromDir:
+        _taskOptions->FromDir = _createDirP->DirName;
+        _taskOptions->FromDirSet = true;
+        _createDirP = new DirCreateParams();
+        _createDirP->DialogTitle = "Куда копировать";
+        _createDirP->OperationType = DirWorker::ToDir;
+        _createDirDialog->ShowDialog( _createDirP);
+        break;
+    case DirWorker::ToDir:
+        _taskOptions->ToDir = _createDirP->DirName;
+        if(_taskOptions->FromDirSet)
+            DoTask();
+        break;
     }
-    else
-    {
-        //ui->CurDirBox->setTitle(QDir::currentPath() + QString("\\") + _createDirP);
-        ui->CurDirBox->setTitle(QDir::currentPath()+ QString("/") + _createDirP->DirName);
-    }
-
 }
 
 
@@ -148,4 +173,58 @@ void AnotherMainWindow::on_UpdateFileButton_clicked()
     {
         QMessageBox::warning(0, "Внимание", ex.what());
     }
+}
+
+void AnotherMainWindow::on_CurrentDir_changed()
+{
+    ui->CurDirBox->setText(DirWorker::CurrentDir());
+}
+
+void AnotherMainWindow::on_OpenedFilesList_itemDoubleClicked(QListWidgetItem *item)
+{
+    bool closed = false;
+    FileCreateParams* file;
+    foreach (file, _openedFiles) {
+        if(file->FileName == item->text())
+        {
+            closed = CloseHandle(file->FileHandle);
+            break;
+        }
+    }
+    if(closed)
+    {
+        _openedFiles.removeOne(file);
+        ui->OpenedFilesList->takeItem(ui->OpenedFilesList->row(ui->OpenedFilesList->currentItem()));
+    }
+    else
+    {
+        TripleSonicSlash::ShowError();
+        return;
+    }
+    QDesktopServices::openUrl(QUrl(item->text()));
+}
+
+void AnotherMainWindow::on_changeDirButton_clicked()
+{
+    _createDirP = new DirCreateParams();
+    _createDirP->DialogTitle = "Имя директории для перехода";
+    _createDirP->OperationType = DirWorker::SetCurrent;
+    _createDirDialog->ShowDialog( _createDirP);
+
+}
+
+void AnotherMainWindow::on_deleteDirButton_clicked()
+{
+    _createDirP = new DirCreateParams();
+    _createDirP->DialogTitle = "Имя директории для удаления";
+    _createDirP->OperationType = DirWorker::Delete;
+    _createDirDialog->ShowDialog( _createDirP);
+}
+
+void AnotherMainWindow::on_DoTaskButton_clicked()
+{
+    _createDirP = new DirCreateParams();
+    _createDirP->DialogTitle = "Откуда копировать";
+    _createDirP->OperationType = DirWorker::FromDir;
+    _createDirDialog->ShowDialog( _createDirP);
 }

@@ -2,10 +2,12 @@
 #define ANOTHERMAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 #include "createfiledialog.h"
 #include "supportclasses.h"
 #include "CreateDirDialog.h"
 #include "fileworker.h"
+#include "DirWorker.h"
 
 namespace Ui {
 class AnotherMainWindow;
@@ -22,7 +24,6 @@ public:
 private slots:
     void on_CreateButton_clicked();
     void on_CreateFileDialog_accepted();
-    void on_CreateFileDialog_rejected();
 
     void on_CloseButton_clicked();
 
@@ -30,9 +31,20 @@ private slots:
     void on_CreateDir_accepted();
     void on_UpdateFileButton_clicked();
 
+    void on_CurrentDir_changed();
+
+    void on_OpenedFilesList_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_changeDirButton_clicked();
+
+    void on_deleteDirButton_clicked();
+
+    void on_DoTaskButton_clicked();
+
 private:
     //funcs
     void DestroyThis(void* pointer);
+    void DoTask();
     //members
     Ui::AnotherMainWindow *ui;
     FileCreateParams *_createFileParams;
@@ -42,6 +54,8 @@ private:
     DirCreateParams* _createDirP;
     QString _rootDir;
     QString _curDir;
+    DirWorker* _dirWorker;
+    TaskOptions* _taskOptions;
 };
 
 #endif // ANOTHERMAINWINDOW_H
