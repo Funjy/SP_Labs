@@ -44,6 +44,7 @@ FileCreateParams* FileWorker::OpenCreateFile(QString fileName)
     FileCreateParams* params = new FileCreateParams();
     params->FileName = fileName;
     params->DesiredAccess = GENERIC_READ;
+    params->DesiredAccess += GENERIC_WRITE;
     params->CreateOptions = OPEN_EXISTING;
     OpenCreateFile(params);
     return params;
