@@ -12,7 +12,7 @@ class FileWorker
 public:
     FileWorker();
     static void OpenCreateFile(FileCreateParams* params = NULL);
-    static void OpenCreateFile(QString fileName);
+    static FileCreateParams* OpenCreateFile(QString fileName);
     static void CloseOpenedFile(FileCreateParams* params);
     static void DeleteExistingFile(FileCreateParams* params);
     static void UpdateFile(FileCreateParams* file);

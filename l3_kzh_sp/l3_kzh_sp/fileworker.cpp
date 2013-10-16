@@ -39,25 +39,27 @@ void FileWorker::OpenCreateFile(FileCreateParams *params)
     params->LastOperationDuration = (t2s - t1s);
 }
 
-void FileWorker::OpenCreateFile(QString fileName)
+FileCreateParams* FileWorker::OpenCreateFile(QString fileName)
 {
     FileCreateParams* params = new FileCreateParams();
     params->FileName = fileName;
     params->DesiredAccess = GENERIC_READ;
     params->CreateOptions = OPEN_EXISTING;
     OpenCreateFile(params);
+    return params;
 }
 
 void FileWorker::CloseOpenedFile(FileCreateParams *params)
-{
+{    
     if(params == NULL)
     {
         MyException ex("Передан не инициализированный параметр.");
         throw ex;
     }
+    params->LastOperationDuration = 0;
     if(!CloseHandle(params->FileHandle))
     {
-        MyException ex(TripleSonicSlash::GetLastErrorMessage());
+        MyException ex(TripleSonicSlash::GetLastErrorMessage());        
         throw ex;
     }
 }
