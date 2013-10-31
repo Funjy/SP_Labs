@@ -14,7 +14,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -29,7 +28,6 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QPushButton *CreateFileButton;
-    QListWidget *OpenedFilesList;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -43,10 +41,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         CreateFileButton = new QPushButton(centralWidget);
         CreateFileButton->setObjectName(QStringLiteral("CreateFileButton"));
-        CreateFileButton->setGeometry(QRect(310, 30, 81, 23));
-        OpenedFilesList = new QListWidget(centralWidget);
-        OpenedFilesList->setObjectName(QStringLiteral("OpenedFilesList"));
-        OpenedFilesList->setGeometry(QRect(30, 20, 256, 192));
+        CreateFileButton->setGeometry(QRect(130, 30, 81, 23));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
