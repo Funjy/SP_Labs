@@ -228,12 +228,13 @@ void FileWorker::UpdateFile(FileCreateParams* file)
 
 }
 
-void FileWorker::SwapSymbols(FileCreateParams* params, char toFind, char toSwap)
+void FileWorker::SwapSymbols(FileCreateParams* params, char toFind, char toSwap, int interval)
 {
     for (int i = 0; i < params->FileSize; i++)
     {
         if(params->ArrayPointer[i] == toFind)
             params->ArrayPointer[i] = toSwap;
+        Sleep(interval);
     }
 }
 

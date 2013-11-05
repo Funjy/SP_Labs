@@ -19,7 +19,7 @@ public:
     static void CloseOpenedMapping(FileCreateParams* params);
     static void DeleteExistingFile(FileCreateParams* params);
     static void UpdateFile(FileCreateParams* file);
-    static void SwapSymbols(FileCreateParams* params, char toFind, char toSwap);
+    static void SwapSymbols(FileCreateParams* params, char toFind, char toSwap, int interval = 0);
 
 };
 

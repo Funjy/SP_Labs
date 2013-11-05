@@ -216,10 +216,11 @@ void AnotherMainWindow::on_OpenedFilesList_itemDoubleClicked(QListWidgetItem *it
     foreach (file, _openedFiles) {
         if(file->FileName == item->text())
         {
-            closed = CloseHandle(file->FileHandle);
+            //closed = CloseHandle(file->FileHandle);
             break;
         }
     }
+    /*
     if(closed)
     {
         _openedFiles.removeOne(file);
@@ -230,7 +231,10 @@ void AnotherMainWindow::on_OpenedFilesList_itemDoubleClicked(QListWidgetItem *it
         TripleSonicSlash::ShowError();
         return;
     }
-    QDesktopServices::openUrl(QUrl(item->text()));
+    QDesktopServices::openUrl(QUrl(item->text()));*/
+
+    ThreadWindow *win = new ThreadWindow(file, this);
+    win->show();
 }
 
 void AnotherMainWindow::on_changeDirButton_clicked()

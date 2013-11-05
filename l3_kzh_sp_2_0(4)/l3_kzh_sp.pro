@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     anothermainwindow.cpp \
     CreateDirDialog.cpp \
     DirWorker.cpp \
-    megathread.cpp
+    megathread.cpp \
+    ThreadWindow.cpp
 
 HEADERS  += \
     fileworker.h \
@@ -32,9 +33,11 @@ HEADERS  += \
     anothermainwindow.h \
     CreateDirDialog.h \
     DirWorker.h \
-    megathread.h
+    megathread.h \
+    ThreadWindow.h
 
 FORMS    += mainwindow.ui \
     createfiledialog.ui \
     anothermainwindow.ui \
-    CreateDirDialog.ui
+    CreateDirDialog.ui \
+    ThreadWindow.ui

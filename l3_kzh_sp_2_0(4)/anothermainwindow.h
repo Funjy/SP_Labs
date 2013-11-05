@@ -1,13 +1,17 @@
 #ifndef ANOTHERMAINWINDOW_H
 #define ANOTHERMAINWINDOW_H
 
+//Qt
 #include <QMainWindow>
 #include <QListWidgetItem>
+//Local
 #include "createfiledialog.h"
 #include "supportclasses.h"
 #include "CreateDirDialog.h"
 #include "fileworker.h"
 #include "DirWorker.h"
+#include "megathread.h"
+#include "ThreadWindow.h"
 
 namespace Ui {
 class AnotherMainWindow;
@@ -41,7 +45,7 @@ private slots:
 
     void on_DoTaskButton_clicked();
 
-    void on_pushButton_clicked();
+    //void on_pushButton_clicked();
 
     void on_OpenThreadWindow_clicked();
 
@@ -60,6 +64,7 @@ private:
     QString _curDir;
     DirWorker* _dirWorker;
     TaskOptions* _taskOptions;
+    QList<QString> _openedThreads;
 };
 
 #endif // ANOTHERMAINWINDOW_H
