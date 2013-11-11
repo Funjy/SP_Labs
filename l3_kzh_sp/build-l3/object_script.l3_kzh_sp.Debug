@@ -8,7 +8,11 @@ INPUT(
 ./debug\anothermainwindow.o
 ./debug\CreateDirDialog.o
 ./debug\DirWorker.o
+./debug\megathread.o
+./debug\ThreadWindow.o
 ./debug\moc_createfiledialog.o
 ./debug\moc_anothermainwindow.o
 ./debug\moc_CreateDirDialog.o
+./debug\moc_megathread.o
+./debug\moc_ThreadWindow.o
 );

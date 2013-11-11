@@ -211,29 +211,27 @@ void AnotherMainWindow::on_CurrentDir_changed()
 
 void AnotherMainWindow::on_OpenedFilesList_itemDoubleClicked(QListWidgetItem *item)
 {
-    bool closed = false;
     FileCreateParams* file;
     foreach (file, _openedFiles) {
         if(file->FileName == item->text())
         {
-            //closed = CloseHandle(file->FileHandle);
             break;
         }
     }
-    /*
-    if(closed)
+
+    if(_winThreads.contains(file->FileName))
     {
-        _openedFiles.removeOne(file);
-        ui->OpenedFilesList->takeItem(ui->OpenedFilesList->row(ui->OpenedFilesList->currentItem()));
-    }
-    else
-    {
-        TripleSonicSlash::ShowError();
+        _winThreads.value(file->FileName)->raise();
         return;
     }
-    QDesktopServices::openUrl(QUrl(item->text()));*/
-
     ThreadWindow *win = new ThreadWindow(file, this);
+    _winThreads.insert(file->FileName, win);
+    //Подключаем сигнал закрытия окна к обработчику
+    QSignalMapper* signalMapper = new QSignalMapper(this);
+    connect(win, SIGNAL(WindowClosed()), signalMapper, SLOT(map()));
+    signalMapper->setMapping(win, file->FileName);
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(on_ThreadWindowClosed(QString)));
+    //Показываем окно
     win->show();
 }
 
@@ -262,7 +260,7 @@ void AnotherMainWindow::on_DoTaskButton_clicked()
     _createDirDialog->ShowDialog( _createDirP);
 }
 
-void AnotherMainWindow::on_OpenThreadWindow_clicked()
+void AnotherMainWindow::on_ThreadWindowClosed(QString arg1)
 {
-
+    _winThreads.remove(arg1);
 }

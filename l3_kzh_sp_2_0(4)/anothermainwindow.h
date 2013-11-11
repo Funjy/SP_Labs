@@ -45,9 +45,9 @@ private slots:
 
     void on_DoTaskButton_clicked();
 
-    //void on_pushButton_clicked();
+public slots:
 
-    void on_OpenThreadWindow_clicked();
+    void on_ThreadWindowClosed(QString arg1);
 
 private:
     //funcs
@@ -64,7 +64,7 @@ private:
     QString _curDir;
     DirWorker* _dirWorker;
     TaskOptions* _taskOptions;
-    QList<QString> _openedThreads;
+    QMap<QString, ThreadWindow*> _winThreads;
 };
 
 #endif // ANOTHERMAINWINDOW_H

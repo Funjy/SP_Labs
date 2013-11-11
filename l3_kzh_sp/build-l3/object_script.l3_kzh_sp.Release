@@ -8,7 +8,11 @@ INPUT(
 ./release\anothermainwindow.o
 ./release\CreateDirDialog.o
 ./release\DirWorker.o
+./release\megathread.o
+./release\ThreadWindow.o
 ./release\moc_createfiledialog.o
 ./release\moc_anothermainwindow.o
 ./release\moc_CreateDirDialog.o
+./release\moc_megathread.o
+./release\moc_ThreadWindow.o
 );

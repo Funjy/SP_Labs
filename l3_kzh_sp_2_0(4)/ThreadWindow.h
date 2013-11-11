@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "supportclasses.h"
 #include "megathread.h"
+#include <QCloseEvent>
 
 namespace Ui {
 class ThreadWindow;
@@ -17,7 +18,12 @@ public:
     explicit ThreadWindow(QWidget *parent = 0);
     ThreadWindow(FileCreateParams *params, QWidget *parent = 0);
     ~ThreadWindow();
-    
+    void closeEvent(QCloseEvent *event);
+
+signals:
+
+    void WindowClosed();
+
 private slots:
     void on_RunStopButton_clicked();
 
@@ -26,7 +32,6 @@ private slots:
     void on_ThreadSelector_currentTextChanged(const QString &arg1);
 
     void on_SetNiceText(QString text);
-
 
 private:
     Ui::ThreadWindow *ui;
@@ -39,6 +44,8 @@ private:
     QString _lowPriority = "Низкий";
     QString _mediumPriority = "Средний";
     QString _highPriority = "Высокий";
+
+    QString _fileName;
 
     QMap<QString, MegaThread*> _threads;
     MegaThread* _curThread;

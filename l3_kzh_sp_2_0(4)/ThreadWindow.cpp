@@ -14,6 +14,9 @@ ThreadWindow::ThreadWindow(QWidget *parent) :
 ThreadWindow::ThreadWindow(FileCreateParams *params, QWidget *parent) : ThreadWindow(parent)
 {
     //LPCRITICAL_SECTION sec;
+
+    _fileName = params->FileName;
+
     InitializeCriticalSection(_critSection);
 
     MegaThread *mtAB = new MegaThread(MegaThread::AB_Swap, params, _critSection);
@@ -52,6 +55,12 @@ ThreadWindow::~ThreadWindow()
         delete it;
     }
     DeleteCriticalSection(_critSection);
+}
+
+void ThreadWindow::closeEvent(QCloseEvent *event)
+{
+    emit WindowClosed();
+    event->accept();
 }
 
 void ThreadWindow::on_RunStopButton_clicked()
