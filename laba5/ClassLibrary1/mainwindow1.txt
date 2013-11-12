@@ -1,0 +1,201 @@
+﻿#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "windows.h"
+#include "math.h"
+
+using namespace std;
+/* LABA5
+int a,b,c;
+typedef int (__stdcall*LPFNDLLFUNCALC)(int,int,int);
+typedef void (__stdcall*LPFNDLLLINEADD)(const char*,const char*,char*);
+LPFNDLLFUNCALC  CalcFunc;
+LPFNDLLLINEADD  LD;
+char Str1,Str2;
+//char outStr[100];
+char* outStr;
+int result;
+QString way = "C:/Users/Администратор/Documents/Visual Studio 2012/Projects/ClassLibrary1/Debug/ClassLibrary1.dll";
+std::wstring sway = way.toStdWString();
+LPCWSTR LPCWway =  sway.c_str();
+HMODULE hdll = LoadLibraryW(LPCWway);
+*/
+
+PVOID adr1,adr2;
+MEMORY_BASIC_INFORMATION inf1,inf2;
+DWORD   inf_size = sizeof(inf1);
+
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+
+    ui->setupUi(this);
+    ui->TextToJoin1->append("data");
+    ui->TextToJoin2->append("text");
+    //------------Declaration variables,types fot Loading Library procedure-----------
+
+
+    //--------------Loading Library----------------
+
+}
+
+MainWindow::~MainWindow()
+{
+  //  FreeLibrary(hdll);
+    delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+
+    GetSystemInfo(&SI);
+    ui->textEdit->append(QString("GetSystemInfo \r\n"));
+    QString numProc = QString::number(SI.dwNumberOfProcessors);
+    ui->textEdit->append(QString("Количество процессоров: ") + numProc + "\r\n");
+    ui->textEdit->append(QString("Размер страницы виртуальной памяти: " + QString::number(SI.dwPageSize) + "\r\n"));
+    ui->textEdit->append(QString("Гранулярность резервирования регионов: " + QString::number(SI.dwAllocationGranularity) + "\r\n"));
+    ui->textEdit->append(QString("Тип архитектуры процессора: " + QString::number(SI.wProcessorArchitecture) + "\r\n"));
+    ui->textEdit->append(QString("Битовая маска: " + QString::number(SI.dwActiveProcessorMask) + "\r\n"));
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+     //записываем размер структуры в байтах
+    GlobalMemoryStatus(&ms);
+    ui->textEdit_2->append(QString("GlobalMemoryStatus \r\n"));
+    ui->textEdit_2->append(QString("Memory Load: ") + QString::number(ms.dwMemoryLoad) + "\r\n");
+    ui->textEdit_2->append(QString("Total Phys: " + QString::number((ms.dwTotalPageFile)/pow(2,30)) + "\r\n"));
+    ui->textEdit_2->append(QString("TotalVirual: " + QString::number((ms.dwTotalVirtual)/pow(2,30)) + "\r\n"));
+    ui->textEdit_2->append(QString("AvailVirtual: " + QString::number((ms.dwAvailVirtual)/pow(2,30)) + "\r\n"));
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+
+    // резервируем регион для текущего приложения размером 2 страницы:
+
+    adr1 = VirtualAlloc(NULL,2* PAGE_SIZE,MEM_RESERVE|MEM_TOP_DOWN,PAGE_READWRITE);
+    if(adr1==NULL){exit(0);}
+    VirtualAlloc(adr1,2*PAGE_SIZE,MEM_COMMIT,PAGE_READWRITE);
+
+    adr2 = VirtualAlloc(NULL,2*PAGE_SIZE,MEM_RESERVE|MEM_TOP_DOWN,PAGE_READWRITE);
+    if(adr2==NULL){exit(0);}
+    VirtualAlloc(adr2,2*PAGE_SIZE,MEM_COMMIT,PAGE_READWRITE);
+
+
+    int *p1= static_cast<int*>(adr1);
+    int *p2= static_cast<int*>(adr2);
+    int count = 10;
+
+
+    FillMemory(adr1,2*PAGE_SIZE,15);
+
+    ui->textEdit_3->clear();
+    ui->textEdit_4->clear();
+
+    for(int i=0; i<count; ++i) {
+        ui->textEdit_3->append(QString("Память 1 до очистки ") + QString::number((p1[i]),16) );
+        }
+
+    for(int i=0; i<count; ++i) {
+        ui->textEdit_4->append(QString("Память 2 до копирования ") + QString::number(p2[i]) );
+        }
+
+    CopyMemory(p2,p1,2*PAGE_SIZE);
+    ZeroMemory(p1,2*PAGE_SIZE);
+
+    ui->textEdit_3->append("\r\n");
+    ui->textEdit_4->append("\r\n");
+
+    for(int i=0; i<count; ++i) {
+        ui->textEdit_3->append(QString("Память 1 после очистки ") + QString::number(p1[i]) );
+        }
+    for(int i=0; i<count; ++i) {
+        ui->textEdit_4->append(QString("Память 2 после копиравания ") + QString::number((p2[i]),16) );
+        }
+}
+
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    ui->textEdit_3->clear();
+    ui->textEdit_4->clear();
+    VirtualQuery( adr1, &inf1, inf_size);
+      ui->textEdit_3->append(QString("------Память 1------") + "\r\n");
+      ui->textEdit_3->append(QString("Base Address: ") + QString::number((int)((char*)inf1.BaseAddress),16) + "\r\n");
+
+      ui->textEdit_3->append(QString("Allocation Base: ") + QString::number((int)((char*)inf1.AllocationBase),16) + "\r\n");
+
+      ui->textEdit_3->append(QString("Allocation Protect: ") + QString::number(inf1.AllocationProtect) + "\r\n");
+      ui->textEdit_3->append(QString("Protect: ") + QString::number(inf1.Protect) + "\r\n");
+      ui->textEdit_3->append(QString("Region Size: ") + QString::number(inf1.RegionSize) + "\r\n");
+      ui->textEdit_3->append(QString("State: ") + QString::number(inf1.State) + "\r\n");
+      ui->textEdit_3->append(QString(" Type: " + QString::number(inf1.Type) + "\r\n"));
+
+      VirtualQuery( adr2, &inf2, inf_size);
+       ui->textEdit_4->append(QString("------Память 2------") + "\r\n");
+       ui->textEdit_4->append(QString("Base Address: ") + QString::number((int)((char*)inf2.BaseAddress),16) + "\r\n");
+       ui->textEdit_4->append(QString("Allocation Base: ") + QString::number((int)((char*)inf2.AllocationBase),16) + "\r\n");
+       ui->textEdit_4->append(QString("Allocation Protect: ") + QString::number(inf2.AllocationProtect) + "\r\n");
+       ui->textEdit_4->append(QString("Protect: ") + QString::number(inf2.Protect) + "\r\n");
+       ui->textEdit_4->append(QString("Region Size: ") + QString::number(inf2.RegionSize) + "\r\n");
+       ui->textEdit_4->append(QString("State: ") + QString::number(inf2.State) + "\r\n");
+      ui->textEdit_4->append(QString(" Type: " + QString::number(inf2.Type) + "\r\n"));
+
+      VirtualFree(adr1,NULL,MEM_RELEASE);
+      VirtualFree(adr2,NULL,MEM_RELEASE);
+}
+/* LABA5
+void MainWindow::on_pushButton_5_clicked()
+{
+    ui->EditofText->clear();
+
+    CalcFunc = (LPFNDLLFUNCALC)GetProcAddress(hdll,"Calc");
+    if (!CalcFunc)
+    {
+        QMessageBox::warning(0,"Внимание","функция не найдена");
+    }
+    LD = (LPFNDLLLINEADD)GetProcAddress(hdll,"LineAdd");
+    if (!LD)
+    {
+        QMessageBox::warning(0,"Внимание","функция не найдена");
+    }
+
+    QString Str = ui->EditofTextA->toPlainText();
+    QString Str1 = ui->EditofTextB->toPlainText();
+    QString Str2 = ui->EditofTextC->toPlainText();
+    a = Str.toInt();
+    b = Str1.toInt();
+    c = Str2.toInt();
+
+    QString text1 = ui->TextToJoin1->toPlainText();
+    QString text2 = ui->TextToJoin2->toPlainText();
+
+    string st1 = text1.toStdString();
+    const char* t1 = st1.c_str();
+    string st2 = text2.toStdString();
+    const char* t2 = st2.c_str();
+
+  //  LD(t1,t2,outStr);
+ //   ui->EditofText->append(outStr);
+    //LD(t1,t2,outStr);\
+    LineAdd(t1, t2, outStr);
+    ui->EditofText->append(QString::number(CalcFunc(a,b,c)));
+    ui->EditofText->append(outStr);
+
+
+}
+
+void MainWindow::LineAdd(const char* Str1,const char* Str2, char* Str3)
+{
+
+    int len3 = strlen(Str1) + strlen(Str2) + 1;
+   // Str3 = new char[len3];
+   // char toRet[len3];
+    strcpy(Str3, Str1);
+    strcat_s(Str3, len3, Str2);
+}
+*/
+
+
